@@ -42,9 +42,19 @@ export default function ReportDetail(props: ReportDetailProps) {
               saveGoal(values.goal.toString());
             }}
           />
+          <Action.OpenInBrowser url={report.link} />
         </ActionPanel>
       }
     >
+      <Form.Description
+        title="Report Details"
+        text={`# ${report.title}\n\n**Total time:** ${report.totalTime.toFixed(2)}h\n\nProject Goal: ${
+          report.goal
+        }h \n\n**Project Link:** ${report.link} \n\nProgress: ${(((report.totalTime || 0) / report.goal) * 100).toFixed(
+          2
+        )}%`}
+      />
+      <Form.Separator />
       <Form.TextField id="goal" title="Goal" value={goal?.toString() ?? ""} placeholder="Enter a goal" />
     </Form>
   );
