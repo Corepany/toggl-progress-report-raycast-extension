@@ -19,3 +19,8 @@ Example response
   }
 ]
 ```
+
+Roadmap
+
+- [ ] Add goals to local storage from detail
+- [ ] Add default goal to prefpane
