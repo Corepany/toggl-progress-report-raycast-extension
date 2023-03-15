@@ -1,3 +1,3 @@
-# Get weather response
+# Get your toggl report from raycast
 
-Getting weather data from API
+This extension allow you to see your progress in Raycast.
