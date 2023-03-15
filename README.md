@@ -22,5 +22,7 @@ Example response
 
 Roadmap
 
-- [ ] Add goals to local storage from detail
+- [x] Add goals to local storage from detail page
 - [ ] Add default goal to prefpane
+- [ ] Add active project with a icon on listing page
+- [ ] Add change log
