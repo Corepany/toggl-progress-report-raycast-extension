@@ -4,7 +4,8 @@ export interface TogglReport {
   totalTime: number;
   link: string;
   workspaceId: number;
-  goal: number;
+  weeklyGoal: number;
+  monthlyGoal: number;
 }
 
 export interface TogglProjectData {

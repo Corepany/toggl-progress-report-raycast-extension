@@ -1,4 +1,4 @@
-import { List, ActionPanel, Action, Icon } from "@raycast/api";
+import { List, ActionPanel, Action, Icon, getPreferenceValues } from "@raycast/api";
 import { ReportItemProps } from "../types";
 import { getProgressIcon } from "@raycast/utils";
 import ReportDetail from "./ReportDetail";
@@ -11,10 +11,18 @@ function formatTime(totalTime: number): string {
 
 export function ReportItem(props: ReportItemProps) {
   const { report, onGoalUpdate } = props;
-  const progress = (report.totalTime || 0) / report.goal;
-  const remainingTime = (report.totalTime - report.goal) * -1;
+  const reportType = getPreferenceValues().reportType;
 
-  console.log(report);
+  let progress = 0;
+  let remainingTime = 0;
+
+  if (reportType == "weekly") {
+    progress = (report.totalTime || 0) / report.weeklyGoal;
+    remainingTime = (report.totalTime - report.weeklyGoal) * -1;
+  } else if (reportType == "monthly") {
+    progress = (report.totalTime || 0) / report.monthlyGoal;
+    remainingTime = (report.totalTime - report.monthlyGoal) * -1;
+  }
   return (
     <List.Item
       id={report.id.toString()}

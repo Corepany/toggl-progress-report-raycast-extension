@@ -4,30 +4,36 @@ import { TogglReport, ReportDetailProps } from "../types";
 
 export default function ReportDetail(props: ReportDetailProps) {
   const { report, onGoalUpdate } = props;
-  const [goal, setGoal] = useState<number | undefined>(undefined);
+  const [weeklyGoal, setGoalWeekly] = useState<number | undefined>(undefined);
+  const [monthlyGoal, setGoalMonthly] = useState<number | undefined>(undefined);
   const [showInput, setShowInput] = useState(false);
   const navigation = useNavigation();
 
   useEffect(() => {
     async function loadGoal() {
-      const storedGoal = await LocalStorage.getItem(`projectGoal:${report.id}`);
-      if (storedGoal) {
-        setGoal(parseFloat(storedGoal as string));
+      const storedWeeklyGoal = await LocalStorage.getItem(`projectWeeklyGoal:${report.id}`);
+      const storedMonthlyGoal = await LocalStorage.getItem(`projectMonthlyGoal:${report.id}`);
+      if (storedMonthlyGoal || storedWeeklyGoal) {
+        setGoalWeekly(parseFloat(storedWeeklyGoal as string));
+        setGoalMonthly(parseFloat(storedMonthlyGoal as string));
       }
     }
     loadGoal();
   }, [report.id]);
 
-  function saveGoal(value: string) {
-    const newGoal = parseFloat(value);
+  function saveGoal(values: TogglReport) {
+    const newWeeklyGoal = parseFloat(values.weeklyGoal.toString());
+    const newMonthlyGoal = parseFloat(values.monthlyGoal.toString());
 
-    if (isNaN(newGoal) || newGoal <= 0) {
+    if (isNaN(newWeeklyGoal) || newWeeklyGoal <= 0) {
       showToast(Toast.Style.Failure, "Invalid goal value. Please enter a positive number.");
       return;
     }
 
-    LocalStorage.setItem(`projectGoal:${report.id}`, newGoal.toString());
-    setGoal(newGoal);
+    LocalStorage.setItem(`projectWeeklyGoal:${report.id}`, newWeeklyGoal.toString());
+    LocalStorage.setItem(`projectMonthlyGoal:${report.id}`, newMonthlyGoal.toString());
+    setGoalWeekly(newWeeklyGoal);
+    setGoalMonthly(newMonthlyGoal);
     onGoalUpdate();
     setShowInput(false);
     navigation.pop();
@@ -39,7 +45,7 @@ export default function ReportDetail(props: ReportDetailProps) {
         <ActionPanel>
           <Action.SubmitForm
             onSubmit={(values: TogglReport) => {
-              saveGoal(values.goal.toString());
+              saveGoal(values);
             }}
           />
           <Action.OpenInBrowser url={report.link} />
@@ -48,12 +54,23 @@ export default function ReportDetail(props: ReportDetailProps) {
     >
       <Form.Description
         title="Report Details"
-        text={`Project Name: ${report.title}\n\nTotal time: ${report.totalTime.toFixed(2)}h\n\nProject Goal: ${
-          report.goal
-        }h \n\nProgress: ${(((report.totalTime || 0) / report.goal) * 100).toFixed(2)}%`}
+        text={`Project Name: ${report.title}\nTotal time: ${report.totalTime.toFixed(
+          2
+        )}h\nProject Weekly Goal: ${weeklyGoal}h\nProject Monthly Goal: ${monthlyGoal}h`}
       />
       <Form.Separator />
-      <Form.TextField id="goal" title="Goal" value={goal?.toString() ?? ""} placeholder="Enter a goal" />
+      <Form.TextField
+        id="weeklyGoal"
+        title="Goal Weekly"
+        value={weeklyGoal?.toString() ?? ""}
+        placeholder="Enter a weekly goal"
+      />
+      <Form.TextField
+        id="monthlyGoal"
+        title="Goal Monthly"
+        value={monthlyGoal?.toString() ?? ""}
+        placeholder="Enter a monthly goal"
+      />
     </Form>
   );
 }

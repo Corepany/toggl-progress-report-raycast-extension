@@ -29,6 +29,23 @@
           "description": "Your Toggl Workspace ID",
           "type": "textfield",
           "required": true
+        },
+        {
+          "name": "reportType",
+          "title": "Report Type",
+          "description": "Would you like to see your progress in a weekly or monthly report?",
+          "type": "dropdown",
+          "data": [
+            {
+              "title": "Weekly",
+              "value": "weekly"
+            },
+            {
+              "title": "Monthly",
+              "value": "monthly"
+            }
+          ],
+          "required": true
         }
       ]
     }

@@ -1,17 +1,22 @@
 import { openExtensionPreferences, LocalStorage, getPreferenceValues } from "@raycast/api";
 
 import fetch from "node-fetch";
-import { TogglReport, TogglProjectData, TogglReportResponse } from "../types";
+import { TogglReport, TogglReportResponse } from "../types";
 
 const TOGGL_BASE_URL = "https://api.track.toggl.com/reports/api/v2";
 const togglApiKey = getPreferenceValues().togglApiKey;
 const togglWorkspaceId = getPreferenceValues().togglWorkspaceId;
+const reportType = getPreferenceValues().reportType;
 
 if (togglApiKey === undefined) {
   openExtensionPreferences();
 }
 
 if (togglWorkspaceId === undefined) {
+  openExtensionPreferences();
+}
+
+if (reportType === undefined) {
   openExtensionPreferences();
 }
 
@@ -23,10 +28,18 @@ function formatDate(date: Date): string {
 }
 export async function fetchTogglReports(): Promise<TogglReport[]> {
   const now = new Date();
-  const dayOfWeek = now.getDay(); // Get the current day of the week (0 = Sunday, 1 = Monday, etc.)
-  const daysSinceMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1; // Calculate the number of days since the most recent Monday
-  const mostRecentMonday = new Date(now.setDate(now.getDate() - daysSinceMonday));
-  const since = formatDate(mostRecentMonday);
+  let since;
+
+  if (reportType === "weekly") {
+    const dayOfWeek = now.getDay(); // Get the current day of the week (0 = Sunday, 1 = Monday, etc.)
+    const daysSinceMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1; // Calculate the number of days since the most recent Monday
+    const mostRecentMonday = new Date(now.setDate(now.getDate() - daysSinceMonday));
+    since = formatDate(mostRecentMonday);
+  } else {
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    since = formatDate(startOfMonth);
+  }
+
   const url = `${TOGGL_BASE_URL}/summary?workspace_id=${togglWorkspaceId}&since=${since}&user_agent=raycast`;
 
   const response = await fetch(url, {
@@ -44,9 +57,11 @@ export async function fetchTogglReports(): Promise<TogglReport[]> {
   const reportPromises: Promise<TogglReport>[] = data.data.map(async (project) => {
     const projectId = project.id;
 
-    const storedGoal = (await LocalStorage.getItem(`projectGoal:${projectId}`)) || defaultGoal;
+    const storedWeeklyGoal = (await LocalStorage.getItem(`projectWeeklyGoal:${projectId}`)) || defaultGoal;
+    const storedMonthlyGoal = (await LocalStorage.getItem(`projectMonthlyGoal:${projectId}`)) || defaultGoal;
 
-    const goal = storedGoal ? Number(storedGoal) : defaultGoal;
+    const weeklyGoal = Number(storedWeeklyGoal);
+    const monthlyGoal = Number(storedMonthlyGoal);
 
     return {
       id: projectId,
@@ -54,7 +69,8 @@ export async function fetchTogglReports(): Promise<TogglReport[]> {
       totalTime: project.time / (1000 * 60 * 60),
       link: `https://track.toggl.com/reports/detailed/2678893/period/thisWeek/projects/${project.id}`,
       workspaceId: 2678893,
-      goal, // Set the goal property
+      weeklyGoal,
+      monthlyGoal,
     };
   });
 
