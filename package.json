@@ -1,0 +1,61 @@
+{
+  "$schema": "https://www.raycast.com/schemas/extension.json",
+  "name": "my-toggl-report",
+  "title": "Your toggl Report",
+  "description": "Getting today's time logs from API",
+  "icon": "command-icon.png",
+  "author": "KaLeM",
+  "categories": [
+    "Data"
+  ],
+  "license": "MIT",
+  "commands": [
+    {
+      "name": "index",
+      "title": "Toggl API",
+      "description": "Get your time logs from Toggl API",
+      "mode": "view",
+      "preferences": [
+        {
+          "name": "togglApiKey",
+          "title": "Toggle API Token",
+          "description": "Your Toggl API Token",
+          "type": "password",
+          "required": true
+        },
+        {
+          "name": "togglWorkspaceId",
+          "title": "Workspace ID",
+          "description": "Your Toggl Workspace ID",
+          "type": "textfield",
+          "required": true
+        }
+      ]
+    }
+  ],
+  "dependencies": {
+    "@raycast/api": "^1.48.4",
+    "@raycast/utils": "^1.5.2",
+    "axios": "^1.3.4",
+    "node-fetch": "^3.3.1",
+    "pretty-ms": "^8.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "18.8.3",
+    "@types/node-fetch": "^2.6.2",
+    "@types/react": "18.0.9",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "prettier": "^2.5.1",
+    "typescript": "^4.4.3"
+  },
+  "scripts": {
+    "build": "ray build -e dist",
+    "dev": "ray develop",
+    "fix-lint": "ray lint --fix",
+    "lint": "ray lint",
+    "publish": "ray publish"
+  }
+}
