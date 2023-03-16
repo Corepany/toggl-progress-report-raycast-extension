@@ -1,35 +1,8 @@
 import { List, ActionPanel, Action, Icon, getPreferenceValues } from "@raycast/api";
-import { ReportItemProps, TogglReport } from "../types";
+import { ReportItemProps } from "../types";
 import { getProgressIcon } from "@raycast/utils";
 import ReportDetail from "./ReportDetail";
-
-function formatTime(totalTime: number): string {
-  const hours = Math.floor(totalTime);
-  const minutes = Math.floor((totalTime - hours) * 60);
-  return `${hours}h ${minutes}m`;
-}
-
-function calculateProgressData(report: TogglReport, reportType: string) {
-  let progress = 0;
-  let remainingTime = 0;
-  let remainingTimeText = "";
-
-  if (reportType === "weekly") {
-    progress = (report.totalTime || 0) / report.weeklyGoal;
-    remainingTime =
-      progress > 1 ? (report.weeklyGoal - report.totalTime) * -1 : (report.totalTime - report.weeklyGoal) * -1;
-    remainingTimeText =
-      progress > 1 ? `Overworked time: ${formatTime(remainingTime)}` : `Remaining time: ${formatTime(remainingTime)}`;
-  } else if (reportType === "monthly") {
-    progress = (report.totalTime || 0) / report.monthlyGoal;
-    remainingTime =
-      progress > 1 ? (report.monthlyGoal - report.totalTime) * -1 : (report.totalTime - report.monthlyGoal) * -1;
-    remainingTimeText =
-      progress > 1 ? `Overworked time: ${formatTime(remainingTime)}` : `Remaining time: ${formatTime(remainingTime)}`;
-  }
-
-  return { progress, remainingTimeText };
-}
+import { formatTime, calculateProgressData } from "../utils/utils";
 
 export function ReportItem(props: ReportItemProps) {
   const { report, onGoalUpdate } = props;

@@ -1,6 +1,7 @@
 import { ActionPanel, Action, showToast, Toast, LocalStorage, useNavigation, Form } from "@raycast/api";
 import { useState, useEffect } from "react";
 import { TogglReport, ReportDetailProps } from "../types";
+import { formatTime } from "../utils/utils";
 
 export default function ReportDetail(props: ReportDetailProps) {
   const { report, onGoalUpdate } = props;
@@ -10,16 +11,17 @@ export default function ReportDetail(props: ReportDetailProps) {
   const navigation = useNavigation();
 
   useEffect(() => {
-    async function loadGoal() {
-      const storedWeeklyGoal = await LocalStorage.getItem(`projectWeeklyGoal:${report.id}`);
-      const storedMonthlyGoal = await LocalStorage.getItem(`projectMonthlyGoal:${report.id}`);
-      if (storedMonthlyGoal || storedWeeklyGoal) {
-        setGoalWeekly(parseFloat(storedWeeklyGoal as string));
-        setGoalMonthly(parseFloat(storedMonthlyGoal as string));
-      }
-    }
     loadGoal();
   }, [report.id]);
+
+  async function loadGoal() {
+    const storedWeeklyGoal = await LocalStorage.getItem(`projectWeeklyGoal:${report.id}`);
+    const storedMonthlyGoal = await LocalStorage.getItem(`projectMonthlyGoal:${report.id}`);
+    if (storedMonthlyGoal || storedWeeklyGoal) {
+      setGoalWeekly(parseFloat(storedWeeklyGoal as string));
+      setGoalMonthly(parseFloat(storedMonthlyGoal as string));
+    }
+  }
 
   function saveGoal(values: TogglReport) {
     const newWeeklyGoal = parseFloat(values.weeklyGoal.toString());
@@ -54,9 +56,9 @@ export default function ReportDetail(props: ReportDetailProps) {
     >
       <Form.Description
         title="Report Details"
-        text={`Project Name: ${report.title}\nTotal time: ${report.totalTime.toFixed(
-          2
-        )}h\nProject Weekly Goal: ${weeklyGoal}h\nProject Monthly Goal: ${monthlyGoal}h`}
+        text={`Project Name: ${report.title}\nTotal time: ${formatTime(
+          report.totalTime
+        )}\nProject Weekly Goal: ${weeklyGoal}h\nProject Monthly Goal: ${monthlyGoal}h`}
       />
       <Form.Separator />
       <Form.TextField
