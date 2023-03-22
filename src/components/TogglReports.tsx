@@ -5,7 +5,9 @@ import { ReportItem } from "./reportItem";
 
 import { List, showToast, Toast, Icon } from "@raycast/api";
 
-export function TogglReports() {
+type ToggleReportsProps = { period: "monthly" | "weekly" };
+
+export function TogglReports(props: ToggleReportsProps) {
   const [reports, setReports] = useState<TogglReport[]>([]);
   const [error, setError] = useState<Error>();
   const [refreshKey, setRefreshKey] = useState(0);
@@ -17,7 +19,7 @@ export function TogglReports() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const data = await fetchTogglReports();
+        const data = await fetchTogglReports(props.period);
         setReports(data);
       } catch (error: any) {
         setError(error as Error);
@@ -41,7 +43,7 @@ export function TogglReports() {
         />
       )}
       {reports.map((report) => (
-        <ReportItem key={report.id} report={report} onGoalUpdate={handleGoalUpdate} />
+        <ReportItem key={report.id} period={props.period} report={report} onGoalUpdate={handleGoalUpdate} />
       ))}
     </List>
   );

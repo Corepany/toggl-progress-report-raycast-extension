@@ -29,5 +29,6 @@ export interface ReportDetailProps {
 
 export interface ReportItemProps {
   report: TogglReport;
+  period: "monthly" | "weekly";
   onGoalUpdate: () => void;
 }

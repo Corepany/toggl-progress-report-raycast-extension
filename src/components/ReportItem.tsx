@@ -1,13 +1,13 @@
 import { List, ActionPanel, Action, Icon, getPreferenceValues } from "@raycast/api";
 import { ReportItemProps } from "../types";
 import { getProgressIcon } from "@raycast/utils";
-import ReportDetail from "./reportDetail";
+import ReportDetailWeekly from "./reportDetailWeekly";
+import ReportDetailMonthly from "./reportDetailMonhly";
 import { formatTime, calculateProgressData } from "../utils/utils";
 
 export function ReportItem(props: ReportItemProps) {
-  const { report, onGoalUpdate } = props;
-  const reportType = "weekly";
-  const { progress, remainingTimeText } = calculateProgressData(report, reportType);
+  const { report, period, onGoalUpdate } = props;
+  const { progress, remainingTimeText } = calculateProgressData(report, period);
 
   return (
     <List.Item
@@ -23,7 +23,13 @@ export function ReportItem(props: ReportItemProps) {
         <ActionPanel>
           <Action.Push
             title="Show Details"
-            target={<ReportDetail report={report} onGoalUpdate={onGoalUpdate} />}
+            target={
+              period === "monthly" ? (
+                <ReportDetailMonthly report={report} onGoalUpdate={onGoalUpdate} />
+              ) : (
+                <ReportDetailWeekly report={report} onGoalUpdate={onGoalUpdate} />
+              )
+            }
             icon={Icon.Eye}
           />
           <Action.OpenInBrowser url={report.link} />

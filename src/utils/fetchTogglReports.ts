@@ -21,10 +21,9 @@ function formatDate(date: Date): string {
     "0"
   )}`;
 }
-export async function fetchTogglReports(): Promise<TogglReport[]> {
+export async function fetchTogglReports(reportType: string): Promise<TogglReport[]> {
   const now = new Date();
   let since;
-  const reportType = "weekly";
 
   if (reportType === "weekly") {
     const dayOfWeek = now.getDay(); // Get the current day of the week (0 = Sunday, 1 = Monday, etc.)
