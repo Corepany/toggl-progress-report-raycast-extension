@@ -46,7 +46,7 @@ export async function fetchTogglReports(reportType: string): Promise<TogglReport
   if (!response.ok) {
     throw new Error(`Failed to fetch Toggl reports: ${response.statusText}`);
   }
-  const defaultGoal = 40;
+  const defaultGoal = 0;
 
   const data = (await response.json()) as TogglReportResponse;
   const reportPromises: Promise<TogglReport>[] = data.data.map(async (project) => {

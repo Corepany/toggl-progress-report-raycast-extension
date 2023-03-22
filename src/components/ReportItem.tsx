@@ -7,7 +7,7 @@ import { formatTime, calculateProgressData } from "../utils/utils";
 
 export function ReportItem(props: ReportItemProps) {
   const { report, period, onGoalUpdate } = props;
-  const { progress, remainingTimeText } = calculateProgressData(report, period);
+  const { progress, remainingTimeText, goalText } = calculateProgressData(report, period);
 
   return (
     <List.Item
@@ -16,7 +16,7 @@ export function ReportItem(props: ReportItemProps) {
       icon={getProgressIcon(progress)}
       accessories={[
         {
-          text: `Total time: ${formatTime(report.totalTime || 0)} / ${remainingTimeText}`,
+          text: `Total: ${formatTime(report.totalTime || 0)} / ${remainingTimeText} / ${goalText}`,
         },
       ]}
       actions={
