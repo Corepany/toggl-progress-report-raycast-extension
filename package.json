@@ -30,12 +30,22 @@
       "name": "weekly",
       "title": "Weekly Toggl Report",
       "description": "Get your time logs from Toggl API",
+      "keywords": [
+        "Toggl",
+        "time logs",
+        "time report"
+      ],
       "mode": "view"
     },
     {
       "name": "monthly",
       "title": "Monthly Toggl Report",
       "description": "Get your time logs from Toggl API",
+      "keywords": [
+        "Toggl",
+        "time logs",
+        "time report"
+      ],
       "mode": "view"
     }
   ],

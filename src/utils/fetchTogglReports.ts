@@ -4,14 +4,9 @@ import fetch from "node-fetch";
 import { TogglReport, TogglReportResponse } from "../types";
 
 const TOGGL_BASE_URL = "https://api.track.toggl.com/reports/api/v2";
-const togglApiKey = getPreferenceValues().togglApiKey;
-const togglWorkspaceId = getPreferenceValues().togglWorkspaceId;
+const { togglApiKey, togglWorkspaceId } = getPreferenceValues();
 
-if (togglApiKey === undefined) {
-  openExtensionPreferences();
-}
-
-if (togglWorkspaceId === undefined) {
+if (!togglApiKey || !togglWorkspaceId) {
   openExtensionPreferences();
 }
 
@@ -21,20 +16,24 @@ function formatDate(date: Date): string {
     "0"
   )}`;
 }
-export async function fetchTogglReports(reportType: string): Promise<TogglReport[]> {
-  const now = new Date();
-  let since;
 
-  if (reportType === "weekly") {
-    const dayOfWeek = now.getDay(); // Get the current day of the week (0 = Sunday, 1 = Monday, etc.)
-    const daysSinceMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1; // Calculate the number of days since the most recent Monday
-    const mostRecentMonday = new Date(now.setDate(now.getDate() - daysSinceMonday));
-    since = formatDate(mostRecentMonday);
-  } else {
-    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-    since = formatDate(startOfMonth);
+export async function fetchTogglReports(reportType: string): Promise<TogglReport[]> {
+  function calculateSince(reportType: string): string {
+    const now = new Date();
+    let sinceDate;
+
+    if (reportType === "weekly") {
+      const dayOfWeek = now.getDay();
+      const daysSinceMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+      sinceDate = new Date(now.setDate(now.getDate() - daysSinceMonday));
+    } else {
+      sinceDate = new Date(now.getFullYear(), now.getMonth(), 1);
+    }
+
+    return formatDate(sinceDate);
   }
 
+  const since = calculateSince(reportType);
   const url = `${TOGGL_BASE_URL}/summary?workspace_id=${togglWorkspaceId}&since=${since}&user_agent=raycast`;
 
   const response = await fetch(url, {
