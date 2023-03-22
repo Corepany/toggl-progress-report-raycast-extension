@@ -1,12 +1,12 @@
 import { List, ActionPanel, Action, Icon, getPreferenceValues } from "@raycast/api";
 import { ReportItemProps } from "../types";
 import { getProgressIcon } from "@raycast/utils";
-import ReportDetail from "./ReportDetail";
+import ReportDetail from "./reportDetail";
 import { formatTime, calculateProgressData } from "../utils/utils";
 
 export function ReportItem(props: ReportItemProps) {
   const { report, onGoalUpdate } = props;
-  const reportType = getPreferenceValues().reportType;
+  const reportType = "weekly";
   const { progress, remainingTimeText } = calculateProgressData(report, reportType);
 
   return (

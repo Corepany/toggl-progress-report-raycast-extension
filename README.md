@@ -92,3 +92,5 @@ Roadmap
 - [x] Add goals to local storage from detail page
 - [ ] Add active project with a icon on listing page
 - [ ] Add change log
+- [ ] Add tests
+- [ ] Starting Toggle timer of a project with blank task name from Raycast

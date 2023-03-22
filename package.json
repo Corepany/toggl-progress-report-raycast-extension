@@ -1,53 +1,42 @@
 {
   "$schema": "https://www.raycast.com/schemas/extension.json",
-  "name": "my-toggl-report",
-  "title": "Your toggl Report",
-  "description": "Getting today's time logs from API",
+  "name": "toggl-progress-report",
+  "title": "Your Toggl Progress Report",
+  "description": "See your progress from your favorite tool",
   "icon": "command-icon.png",
   "author": "KaLeM",
   "categories": [
     "Data"
   ],
+  "preferences": [
+    {
+      "name": "togglApiKey",
+      "title": "Toggle API Token",
+      "description": "Your Toggl API Token",
+      "type": "password",
+      "required": true
+    },
+    {
+      "name": "togglWorkspaceId",
+      "title": "Workspace ID",
+      "description": "Your Toggl Workspace ID",
+      "type": "textfield",
+      "required": true
+    }
+  ],
   "license": "MIT",
   "commands": [
     {
-      "name": "index",
-      "title": "Toggl API",
+      "name": "weekly",
+      "title": "Weekly Toggl Report",
       "description": "Get your time logs from Toggl API",
-      "mode": "view",
-      "preferences": [
-        {
-          "name": "togglApiKey",
-          "title": "Toggle API Token",
-          "description": "Your Toggl API Token",
-          "type": "password",
-          "required": true
-        },
-        {
-          "name": "togglWorkspaceId",
-          "title": "Workspace ID",
-          "description": "Your Toggl Workspace ID",
-          "type": "textfield",
-          "required": true
-        },
-        {
-          "name": "reportType",
-          "title": "Report Type",
-          "description": "Would you like to see your progress in a weekly or monthly report?",
-          "type": "dropdown",
-          "data": [
-            {
-              "title": "Weekly",
-              "value": "weekly"
-            },
-            {
-              "title": "Monthly",
-              "value": "monthly"
-            }
-          ],
-          "required": true
-        }
-      ]
+      "mode": "view"
+    },
+    {
+      "name": "monthly",
+      "title": "Monthly Toggl Report",
+      "description": "Get your time logs from Toggl API",
+      "mode": "view"
     }
   ],
   "dependencies": {

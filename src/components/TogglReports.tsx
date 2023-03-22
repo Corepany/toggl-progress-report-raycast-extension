@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { fetchTogglReports } from "../utils/fetchTogglReports";
 import { TogglReport } from "../types";
-import { ReportItem } from "./ReportItem";
+import { ReportItem } from "./reportItem";
 
 import { List, showToast, Toast, Icon } from "@raycast/api";
 

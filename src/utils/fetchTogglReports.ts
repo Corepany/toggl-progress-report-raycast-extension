@@ -1,4 +1,4 @@
-import { openExtensionPreferences, LocalStorage, getPreferenceValues } from "@raycast/api";
+import { openExtensionPreferences, LocalStorage, getPreferenceValues, Preferences } from "@raycast/api";
 
 import fetch from "node-fetch";
 import { TogglReport, TogglReportResponse } from "../types";
@@ -6,17 +6,12 @@ import { TogglReport, TogglReportResponse } from "../types";
 const TOGGL_BASE_URL = "https://api.track.toggl.com/reports/api/v2";
 const togglApiKey = getPreferenceValues().togglApiKey;
 const togglWorkspaceId = getPreferenceValues().togglWorkspaceId;
-const reportType = getPreferenceValues().reportType;
 
 if (togglApiKey === undefined) {
   openExtensionPreferences();
 }
 
 if (togglWorkspaceId === undefined) {
-  openExtensionPreferences();
-}
-
-if (reportType === undefined) {
   openExtensionPreferences();
 }
 
@@ -29,6 +24,7 @@ function formatDate(date: Date): string {
 export async function fetchTogglReports(): Promise<TogglReport[]> {
   const now = new Date();
   let since;
+  const reportType = "weekly";
 
   if (reportType === "weekly") {
     const dayOfWeek = now.getDay(); // Get the current day of the week (0 = Sunday, 1 = Monday, etc.)
