@@ -56,13 +56,20 @@ export async function fetchTogglReports(reportType: string): Promise<TogglReport
 
     const weeklyGoal = Number(storedWeeklyGoal);
     const monthlyGoal = Number(storedMonthlyGoal);
+    let periodOfTime = "weekly";
+
+    if (reportType === "weekly") {
+      periodOfTime = "thisWeek";
+    } else if (reportType === "monthly") {
+      periodOfTime = "thisMonth";
+    }
 
     return {
       id: projectId,
       title: project.title.project,
       totalTime: project.time / (1000 * 60 * 60),
-      link: `https://track.toggl.com/reports/detailed/2678893/period/thisWeek/projects/${project.id}`,
-      workspaceId: 2678893,
+      link: `https://track.toggl.com/reports/detailed/${togglWorkspaceId}/period/${periodOfTime}/projects/${project.id}`,
+      workspaceId: togglWorkspaceId,
       weeklyGoal,
       monthlyGoal,
     };
