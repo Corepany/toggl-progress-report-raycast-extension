@@ -12,6 +12,8 @@ export function TogglReports(props: ToggleReportsProps) {
   const [error, setError] = useState<Error>();
   const [refreshKey, setRefreshKey] = useState(0);
 
+  console.log("TogglReports", reports);
+
   const handleGoalUpdate = () => {
     setRefreshKey((prevKey) => prevKey + 1);
   };
@@ -42,9 +44,11 @@ export function TogglReports(props: ToggleReportsProps) {
           icon={Icon.XMarkCircle}
         />
       )}
-      {reports.map((report) => (
-        <ReportItem key={report.id} period={props.period} report={report} onGoalUpdate={handleGoalUpdate} />
-      ))}
+      {reports.map((report) =>
+        report.id ? (
+          <ReportItem key={report.id} period={props.period} report={report} onGoalUpdate={handleGoalUpdate} />
+        ) : null
+      )}
     </List>
   );
 }

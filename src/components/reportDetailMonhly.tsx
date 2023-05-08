@@ -1,4 +1,4 @@
-import { ActionPanel, Action, showToast, Toast, LocalStorage, useNavigation, Form } from "@raycast/api";
+import { ActionPanel, Action, LocalStorage, useNavigation, Form, getPreferenceValues, Detail } from "@raycast/api";
 import { useState, useEffect } from "react";
 import { TogglReport, ReportDetailProps } from "../types";
 import { formatTime } from "../utils/utils";
@@ -29,6 +29,29 @@ export default function ReportDetailMonthly(props: ReportDetailProps) {
     navigation.pop();
   }
 
+  function togglStartTimer($projectId: number) {
+    const { togglApiKey } = getPreferenceValues();
+
+    var TogglClient = require("toggl-api");
+    var toggl = new TogglClient({ apiToken: togglApiKey });
+
+    toggl.startTimeEntry(
+      {
+        description: "Some description",
+        billable: false,
+        pid: $projectId,
+      },
+      function (err: any, timeEntry: { id: any }) {
+        // To-do handle error
+      }
+    );
+  }
+
+  function TimeStarted() {
+    togglStartTimer(report.id);
+    return <Detail markdown="Time Started" />;
+  }
+
   return (
     <Form
       actions={
@@ -39,6 +62,7 @@ export default function ReportDetailMonthly(props: ReportDetailProps) {
             }}
           />
           <Action.OpenInBrowser url={report.link} />
+          <Action.Push title="Start Timer" target={<TimeStarted />} />
         </ActionPanel>
       }
     >
