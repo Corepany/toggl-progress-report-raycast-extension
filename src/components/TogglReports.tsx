@@ -12,8 +12,6 @@ export function TogglReports(props: ToggleReportsProps) {
   const [error, setError] = useState<Error>();
   const [refreshKey, setRefreshKey] = useState(0);
 
-  console.log("TogglReports", reports);
-
   const handleGoalUpdate = () => {
     setRefreshKey((prevKey) => prevKey + 1);
   };
